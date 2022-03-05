@@ -228,7 +228,11 @@ void pre_order_traverse(const processes *p, int index, int level, const options 
 int main(int ac, char *av[]) {
     options opt = get_options(ac, av);
     
-    // show_options(&opt);
+    if (opt.version) {
+        printf("pstree 0.1\n");
+        exit(EXIT_SUCCESS);
+    }
+
     processes * p = (processes*)malloc(sizeof(processes));
     get_process(p);
     set_parent_process_index(p);
