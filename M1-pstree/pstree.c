@@ -237,9 +237,8 @@ int main(int ac, char *av[]) {
     processes * p = (processes*)malloc(sizeof(processes));
     get_process(p);
     set_parent_process_index(p);
-    // show_process(p);
-    // pre_order_traverse(p, 0, 0, &opt);
-    show_processes(p);
+    pre_order_traverse(p, 0, 0, &opt);
+    // show_processes(p);
 
     free(p);
     return 0;
