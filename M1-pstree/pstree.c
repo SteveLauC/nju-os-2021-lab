@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 
+// the max number of process we are going to deal with
 #define MAX_PROC 500
 
 // type of cli options
@@ -18,7 +19,6 @@ typedef struct {
     bool numeric_sort;
     bool version; 
 }options;
-
 
 // parse the cli options
 options get_options(int ac, char *av[]) {
@@ -75,12 +75,7 @@ typedef struct {
     int p_num;
 } processes;
 
-void show_processes(const processes * p) {
-    for (int i = 0; i < p->p_num; i++) {
-        printf("cmd: %s/pid: %d/ppid: %d/pp_ind: %d\n", p->p_array[i].cmd, p->p_array[i].pid, p->p_array[i].ppid, p->p_array[i].parent_index);
-    }
-}
-
+// parse the contents of `/proc/[pid]/stat` file and set `cmd` and `ppid` fields
 void parse_stat(char * contents, processes * p) {
     char * c;
     int count = 0;  // record how many whitespaces have been converted
@@ -104,8 +99,6 @@ void parse_stat(char * contents, processes * p) {
             count += 1;
         }
     }
-
-    // printf("debug: stat = %s\n", contents);
 
     // parse the contents of stat file using delimiter `%`
     char * delimiter = "%";
