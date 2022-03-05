@@ -145,9 +145,7 @@ void get_process(processes * p) {
     }
     // read the entries in the directory
     while (NULL != (dirent_ptr=readdir(dir_ptr))) {
-
-        // skip the hidden and system-wide info files 
-        if (0==strncmp(dirent_ptr->d_name, ".", 1))
+numeric-sort: 按照pid的数值从小到大顺序输出一个进程的直接孩子。  if (0==strncmp(dirent_ptr->d_name, ".", 1))
             continue;
         if (isalpha(dirent_ptr->d_name[0]))
             continue;
