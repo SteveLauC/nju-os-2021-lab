@@ -19,9 +19,6 @@ typedef struct {
     bool version; 
 }options;
 
-// void show_options(options * opt) {
-//     printf("show pid: %d\nnumeric sort: %d\nversion: %d\n", opt->show_pid, opt->numeric_sort, opt->version);
-// }
 
 // parse the cli options
 options get_options(int ac, char *av[]) {
@@ -78,14 +75,6 @@ typedef struct {
     int p_num;
 } processes;
 
-void show_process(processes * p) {
-    for (int i = 0; i < p->p_num; i++ ) {
-        printf("cmd: %s\npid: %d\nppid: %d\nparent_index: %d\n\n", p->p_array[i].cmd, p->p_array[i].pid, p->p_array[i].ppid, p->p_array[i].parent_index);
-        // if (0==p->p_array[i].ppid) {
-        //     printf("%s/%d/%d/%d\n", p->p_array[i].cmd, p->p_array[i].pid, p->p_array[i].ppid, p->p_array[i].parent_index);
-        // }
-    }
-}
 
 void parse_stat(char * contents, processes * p) {
     char * c;
