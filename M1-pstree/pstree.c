@@ -28,11 +28,11 @@ options get_options(int ac, char *av[]) {
         false,
     };
 
-    const char * short_option = ":pnv";
+    const char * short_option = ":pnV";
     const struct option long_opton[4] = {
         {"show-pids", 0, NULL, 'p'},
         {"numeric-sort", 0, NULL, 'n'},
-        {"version", 0, NULL, 'v'},
+        {"version", 0, NULL, 'V'},
         {NULL, 0, NULL, 0},
     };
 
