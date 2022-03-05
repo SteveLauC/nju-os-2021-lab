@@ -212,13 +212,13 @@ void set_parent_process_index(processes * p) {
 
 void pre_order_traverse(const processes *p, int index, int level) {
     if (0!=p->p_num) {
-        // for(int i = 0; i < level;i++) {
-            // printf("\t");
-        // }
+        for(int i = 0; i < level;i++) {
+            printf("\t");
+        }
         printf("%s\n", p->p_array[index].cmd);
 
         for (int j = 0; j < p->p_num; j++ ) {
-            if (p->p_array[j].ppid==index) {
+            if (p->p_array[j].parent_index==index) {
                 pre_order_traverse(p, j, level+1);
             }
         }
