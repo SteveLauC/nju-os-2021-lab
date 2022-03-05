@@ -215,7 +215,7 @@ void pre_order_traverse(const processes *p, int index, int level) {
         for(int i = 0; i < level;i++) {
             printf("\t");
         }
-        printf("%s\n", p->p_array[index].cmd);
+        // printf("%s\n", p->p_array[index].cmd);
 
         for (int j = 0; j < p->p_num; j++ ) {
             if (p->p_array[j].ppid==index) {
