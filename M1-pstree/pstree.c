@@ -11,6 +11,8 @@
 
 // type of cli options
 typedef int bool;
+#define false 0
+#define true 1
 typedef struct {
     bool show_pid;
     bool numeric_sort;
@@ -24,9 +26,9 @@ typedef struct {
 // parse the cli options
 options get_options(int ac, char *av[]) {
     options opt = {
-        0,
-        0,
-        0,
+        false,
+        false,
+        false,
     };
 
     const char * short_option = ":pnv";
@@ -87,8 +89,12 @@ void show_process(processes * p) {
 
 void parse_stat(char * contents, processes * p) {
     char * c;
-    int count = 0;
-    int sign = 0;
+    int count = 0;  // record how many whitespaces have been converted
+    int sign = 0;   // sign to indicate whether we are in the `()`
+
+    // convert `pid (comm) state ppid...` into a format like this: `pid%(comm)%state%ppid...`, 
+    // for the reason that field `comm` may have whitespace, which obstructs our splitting process.
+    // 3 whitespaces need to be converted: 
     for(c=contents; count < 3; c++) {
         if ('(' == *c) {
             sign = 1;
@@ -105,7 +111,7 @@ void parse_stat(char * contents, processes * p) {
 
     // printf("debug: stat = %s\n", contents);
 
-    // parse the contents of stat file
+    // parse the contents of stat file using delimiter `%`
     char * delimiter = "%";
     char * token = strtok(contents, delimiter);
     for (int i = 0; i < 3; i++) {
@@ -174,12 +180,13 @@ void get_process(processes * p) {
         }
 
 
+        // set ppid and cmd fields
         parse_stat(buf, p);
 
         // some assertions
-        // assert(strlen(p->p_array[p->p_num].cmd) >=2);
-        // assert(p->p_array[p->p_num].pid >= 0);
-        // assert(p->p_array[p->p_num].ppid >= 0);
+        assert(strlen(p->p_array[p->p_num].cmd) >=2);
+        assert(p->p_array[p->p_num].pid >= 0);
+        assert(p->p_array[p->p_num].ppid >= 0);
 
         fclose(fp); // close the file
         free(buf);  // free the memory
