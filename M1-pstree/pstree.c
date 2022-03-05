@@ -223,13 +223,13 @@ void numeric_sort(processes * const p, const int index) {
         int ptr = 0;
         for (int j = indices_of_child_proc[ptr]; ptr < amount_of_child_proc-i-1; ptr++) {
             j = indices_of_child_proc[ptr];
-            printf("spin\n");
             if (p->p_array[j].pid > p->p_array[indices_of_child_proc[ptr+1]].pid) {
-                // printf("debug: swap\n");
+                // swap the pid field
                 int tmp_pid = p->p_array[j].pid;
                 p->p_array[j].pid = p->p_array[indices_of_child_proc[ptr+1]].pid;
                 p->p_array[indices_of_child_proc[ptr+1]].pid = tmp_pid;
 
+                // swap the cmd field
                 char tmp_cmd[256];
                 *tmp_cmd = '\0';
                 strncpy(tmp_cmd, p->p_array[j].cmd, strlen(p->p_array[j].cmd));
@@ -240,17 +240,19 @@ void numeric_sort(processes * const p, const int index) {
     }
 }
 
-void pre_order_traverse(processes * const p, const int index, int level, const options * const opt_ptr) {
+// recursively traverse the processes tree in preorder
+void preorder_traverse(processes * const p, const int index, int level, const options * const opt_ptr) {
     if (0!=p->p_num) {
         for(int i = 0; i < level;i++) {
             printf("\t");
         }
         printf("%s", p->p_array[index].cmd);
 
+        // if `-p/--show-pids` option is present, print the pid number
         if (opt_ptr->show_pid) {
             printf("(%d)", p->p_array[index].pid);
         }
-
+        // if `-n/--numeric-sort` option is present, print the child processes in ascending order
         if (opt_ptr->numeric_sort) {
             numeric_sort(p, index);
         }
@@ -258,7 +260,7 @@ void pre_order_traverse(processes * const p, const int index, int level, const o
 
         for (int j = 0; j < p->p_num; j++ ) {
             if (p->p_array[j].parent_index==index) {
-                pre_order_traverse(p, j, level+1, opt_ptr);
+                preorder_traverse(p, j, level+1, opt_ptr);
             }
         }
     }
@@ -273,7 +275,7 @@ int main(int ac, char *av[]) {
     processes * p = (processes*)malloc(sizeof(processes));
     get_process(p);
     set_parent_process_index(p);
-    pre_order_traverse(p, 0, 0, &opt);
+    preorder_traverse(p, 0, 0, &opt);
     free(p);
     return 0;
 }
