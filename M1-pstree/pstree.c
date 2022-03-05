@@ -218,11 +218,25 @@ void numeric_sort(processes * const p, const int index) {
     
 
     // sort the child processes 
-    int ptr1 = 0;
-    int ptr2 = 0;
+    for (int i = 0; i < amount_of_child_proc-1; i++) {
+        int ptr = 0;
+        for (int j = indices_of_child_proc[ptr]; ptr < amount_of_child_proc-i-1; ptr++) {
+            j = indices_of_child_proc[ptr];
+            if (p->p_array[j].pid > p->p_array[indices_of_child_proc[ptr+1]]) {
+                int tmp_pid = p->p_array[j].pid;
+                p->p_array[j].pid = p->p_array[indices_of_child_proc[ptr+1]].pid;
+                p->p_array[indices_of_child_proc[ptr+1]].pid = tmp_pid;
+
+                char tmp_cmd[256] = '\0';
+                strncpy(tmp_cmd, p->p_array[j].cmd, strlen(p->p_array[j].cmd));
+                strncpy(p->p_array[j].cmd, p->p_array[indices_of_child_proc[ptr+1]].cmd, strlen(p->p_array[indices_of_child_proc[ptr+1]].cmd));
+                strncpy(p->p_array[indices_of_child_proc[ptr+1]].cmd, tmp_cmd, strlen(tmp_cmd));
+            }
+        }
+    }
     for(int i = indices_of_child_proc[ptr1]; ptr1 < amount_of_child_proc; ptr1++) {
-        for(int j = indices_of_child_proc[ptr2]; ptr2 < amount_of_child_proc-ptr1-1; ptr2++) {
-            if (p->p_array[j].pid > p->p_array[j+1].pid) {
+    for(int j = indices_of_child_proc[ptr2]; ptr2 < amount_of_child_proc-ptr1-1; ptr2++) {
+        if (p->p_array[j].pid > p->p_array[j+1].pid) {
                 printf("swap!!!\n");
                 // swap cmd and ppid
                 int tmp_pid = p->p_array[j].pid;
@@ -230,8 +244,6 @@ void numeric_sort(processes * const p, const int index) {
                 p->p_array[j+1].pid = tmp_pid;
 
                 char tmp_cmd[256] = "\0";
-                strncpy(tmp_cmd, p->p_array[j].cmd, strlen(p->p_array[j].cmd));
-                strncpy(p->p_array[j].cmd, p->p_array[j+1].cmd, strlen(p->p_array[j+1].cmd));
                 strncpy(p->p_array[j+1].cmd, tmp_cmd, strlen(tmp_cmd));
             }
         }
