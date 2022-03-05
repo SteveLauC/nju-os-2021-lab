@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 
-#define MAX_PROC 20000
+#define MAX_PROC 500
 
 // type of cli options
 typedef int bool;
@@ -205,9 +205,40 @@ void set_parent_process_index(processes * p) {
     }
 }
 
+void numeric_sort(processes * const p, const int index) {
+    int indices_of_child_proc[MAX_PROC];
+    int amount_of_child_proc = 0;
+    
+    // put the indices of child processes in the array
+    for (int i = 0; i < p->p_num; i++) {
+        if (p->p_array[i].parent_index==index) {
+            indices_of_child_proc[amount_of_child_proc++] = i;
+        }
+    }
+    
 
+    // sort the child processes 
+    int ptr1 = 0;
+    int ptr2 = 0;
+    for(int i = indices_of_child_proc[ptr1]; ptr1 < amount_of_child_proc; ptr1++) {
+        for(int j = indices_of_child_proc[ptr2]; ptr2 < amount_of_child_proc-ptr1-1; ptr2++) {
+            if (p->p_array[j].pid > p->p_array[j+1].pid) {
+                // swap cmd and ppid
+                int tmp_pid = p->p_array[j].pid;
+                p->p_array[j].pid = p->p_array[j+1].pid;
+                p->p_array[j+1].pid = tmp_pid;
 
-void pre_order_traverse(const processes *p, int index, int level, const options * const opt_ptr) {
+                char tmp_cmd[256] = "\0";
+                strncpy(tmp_cmd, p->p_array[j].cmd, strlen(p->p_array[j].cmd));
+                strncpy(p->p_array[j].cmd, p->p_array[j+1].cmd, strlen(p->p_array[j+1].cmd));
+                strncpy(p->p_array[j+1].cmd, tmp_cmd, strlen(tmp_cmd));
+            }
+        }
+    }
+
+}
+
+void pre_order_traverse(processes * const p, const int index, int level, const options * const opt_ptr) {
     if (0!=p->p_num) {
         for(int i = 0; i < level;i++) {
             printf("\t");
@@ -216,6 +247,10 @@ void pre_order_traverse(const processes *p, int index, int level, const options 
 
         if (opt_ptr->show_pid) {
             printf("(%d)", p->p_array[index].pid);
+        }
+
+        if (opt_ptr->numeric_sort) {
+            numeric_sort(p, index);
         }
         printf("\n");
 
@@ -238,8 +273,6 @@ int main(int ac, char *av[]) {
     get_process(p);
     set_parent_process_index(p);
     pre_order_traverse(p, 0, 0, &opt);
-    // show_processes(p);
-
     free(p);
     return 0;
 }
