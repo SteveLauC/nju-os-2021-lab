@@ -45,7 +45,7 @@ options get_options(int ac, char *av[]) {
             case 'n':
                 opt.numeric_sort = 1;
                 break;
-            case 'v':
+            case 'V':
                 opt.version = 1;
                 break;
             case ':':
