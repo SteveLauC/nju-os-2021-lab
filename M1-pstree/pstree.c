@@ -222,7 +222,7 @@ void numeric_sort(processes * const p, const int index) {
     int ptr2 = 0;
     for(int i = indices_of_child_proc[ptr1]; ptr1 < amount_of_child_proc; ptr1++) {
         for(int j = indices_of_child_proc[ptr2]; ptr2 < amount_of_child_proc-ptr1-1; ptr2++) {
-            if (p->p_array[j].pid > p->p_array[j+1].pid) {
+            if (p->p_array[j].pid < p->p_array[j+1].pid) {
                 // swap cmd and ppid
                 int tmp_pid = p->p_array[j].pid;
                 p->p_array[j].pid = p->p_array[j+1].pid;
