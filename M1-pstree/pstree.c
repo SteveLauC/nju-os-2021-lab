@@ -210,7 +210,8 @@ void set_parent_process_index(processes * p) {
 }
 
 
-void pre_order_traverse(const processes *p, int index, int level) {
+
+void pre_order_traverse(const processes *p, int index, int level, const options * const opt_ptr) {
     if (0!=p->p_num) {
         for(int i = 0; i < level;i++) {
             printf("\t");
@@ -219,20 +220,20 @@ void pre_order_traverse(const processes *p, int index, int level) {
 
         for (int j = 0; j < p->p_num; j++ ) {
             if (p->p_array[j].parent_index==index) {
-                pre_order_traverse(p, j, level+1);
+                pre_order_traverse(p, j, level+1, opt_ptr);
             }
         }
     }
 }
 int main(int ac, char *av[]) {
-    // options opt = get_options(ac, av);
+    options opt = get_options(ac, av);
     
     // show_options(&opt);
     processes * p = (processes*)malloc(sizeof(processes));
     get_process(p);
     set_parent_process_index(p);
     // show_process(p);
-    pre_order_traverse(p, 0, 0);
+    pre_order_traverse(p, 0, 0, &opt);
 
     free(p);
     return 0;
