@@ -98,9 +98,11 @@ void parse_stat(char * contents, processes * p) {
     for(c=contents; count < 3; c++) {
         if ('(' == *c) {
             sign = 1;
+            *c='%';
         }
         if (')' == *c) {
             sign = 0;
+            *c='%';
         }
 
         if (0==sign && ' ' == *c) {
@@ -118,6 +120,7 @@ void parse_stat(char * contents, processes * p) {
         token = strtok(NULL, delimiter);
         if (0==i){
             strncpy(p->p_array[p->p_num].cmd, token, strlen(token));
+            
         }
         if (2==i) {
             p->p_array[p->p_num].ppid = atoi(token);
