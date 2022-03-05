@@ -92,9 +92,9 @@ void parse_stat(char * contents, processes * p) {
     int count = 0;  // record how many whitespaces have been converted
     int sign = 0;   // sign to indicate whether we are in the `()`
 
-    // convert `pid (comm) state ppid...` into a format like this: `pid%(comm)%state%ppid...`, 
-    // for the reason that field `comm` may have whitespace, which obstructs our splitting process.
-    // 3 whitespaces need to be converted: 
+    // convert `pid (comm) state ppid...` into a format like this: `pid%%comm%%state%ppid...`, 
+    // for the reason that field `comm` may has whitespace, which obstructs our splitting process.
+    // 3 whitespaces and 2 parentheses need to be converted, procedure is done when 3 whitespaces are all converted.
     for(c=contents; count < 3; c++) {
         if ('(' == *c) {
             sign = 1;
@@ -218,7 +218,12 @@ void pre_order_traverse(const processes *p, int index, int level, const options 
         for(int i = 0; i < level;i++) {
             printf("\t");
         }
-        printf("%s\n", p->p_array[index].cmd);
+        printf("%s", p->p_array[index].cmd);
+
+        if (opt_ptr->show_pid) {
+            printf("%d", p->p_array[index].pid);
+        }
+        printf("\n");
 
         for (int j = 0; j < p->p_num; j++ ) {
             if (p->p_array[j].parent_index==index) {
