@@ -223,7 +223,7 @@ void numeric_sort(processes * const p, const int index) {
         for (int j = indices_of_child_proc[ptr]; ptr < amount_of_child_proc-i-1; ptr++) {
             j = indices_of_child_proc[ptr];
             if (p->p_array[j].pid > p->p_array[indices_of_child_proc[ptr+1]].pid) {
-                printf("debug: swap\n");
+                // printf("debug: swap\n");
                 int tmp_pid = p->p_array[j].pid;
                 p->p_array[j].pid = p->p_array[indices_of_child_proc[ptr+1]].pid;
                 p->p_array[indices_of_child_proc[ptr+1]].pid = tmp_pid;
