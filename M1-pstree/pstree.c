@@ -227,28 +227,14 @@ void numeric_sort(processes * const p, const int index) {
                 p->p_array[j].pid = p->p_array[indices_of_child_proc[ptr+1]].pid;
                 p->p_array[indices_of_child_proc[ptr+1]].pid = tmp_pid;
 
-                char tmp_cmd[256] = '\0';
+                char tmp_cmd[256];
+                *tmp_cmd = '\0';
                 strncpy(tmp_cmd, p->p_array[j].cmd, strlen(p->p_array[j].cmd));
                 strncpy(p->p_array[j].cmd, p->p_array[indices_of_child_proc[ptr+1]].cmd, strlen(p->p_array[indices_of_child_proc[ptr+1]].cmd));
                 strncpy(p->p_array[indices_of_child_proc[ptr+1]].cmd, tmp_cmd, strlen(tmp_cmd));
             }
         }
     }
-    for(int i = indices_of_child_proc[ptr1]; ptr1 < amount_of_child_proc; ptr1++) {
-    for(int j = indices_of_child_proc[ptr2]; ptr2 < amount_of_child_proc-ptr1-1; ptr2++) {
-        if (p->p_array[j].pid > p->p_array[j+1].pid) {
-                printf("swap!!!\n");
-                // swap cmd and ppid
-                int tmp_pid = p->p_array[j].pid;
-                p->p_array[j].pid = p->p_array[j+1].pid;
-                p->p_array[j+1].pid = tmp_pid;
-
-                char tmp_cmd[256] = "\0";
-                strncpy(p->p_array[j+1].cmd, tmp_cmd, strlen(tmp_cmd));
-            }
-        }
-    }
-
 }
 
 void pre_order_traverse(processes * const p, const int index, int level, const options * const opt_ptr) {
