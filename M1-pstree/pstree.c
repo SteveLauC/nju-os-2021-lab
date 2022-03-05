@@ -205,9 +205,10 @@ void set_parent_process_index(processes * p) {
     }
 }
 
+// sort the child processes of the process in `index`
 void numeric_sort(processes * const p, const int index) {
-    int indices_of_child_proc[MAX_PROC];
-    int amount_of_child_proc = 0;
+    int indices_of_child_proc[MAX_PROC];   // store indices of child processes
+    int amount_of_child_proc = 0;          // record how many child processes we have
     
     // put the indices of child processes in the array
     for (int i = 0; i < p->p_num; i++) {
@@ -222,6 +223,7 @@ void numeric_sort(processes * const p, const int index) {
         int ptr = 0;
         for (int j = indices_of_child_proc[ptr]; ptr < amount_of_child_proc-i-1; ptr++) {
             j = indices_of_child_proc[ptr];
+            printf("spin\n");
             if (p->p_array[j].pid > p->p_array[indices_of_child_proc[ptr+1]].pid) {
                 // printf("debug: swap\n");
                 int tmp_pid = p->p_array[j].pid;
@@ -263,7 +265,6 @@ void pre_order_traverse(processes * const p, const int index, int level, const o
 }
 int main(int ac, char *av[]) {
     options opt = get_options(ac, av);
-    
     if (opt.version) {
         printf("pstree 0.1\n");
         exit(EXIT_SUCCESS);
