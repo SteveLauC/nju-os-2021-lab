@@ -98,11 +98,11 @@ void parse_stat(char * contents, processes * p) {
     for(c=contents; count < 3; c++) {
         if ('(' == *c) {
             sign = 1;
-            *c='%';
+            // *c='%';
         }
         if (')' == *c) {
             sign = 0;
-            *c='%';
+            // *c='%';
         }
 
         if (0==sign && ' ' == *c) {
