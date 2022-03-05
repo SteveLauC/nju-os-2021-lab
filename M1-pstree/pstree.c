@@ -75,6 +75,11 @@ typedef struct {
     int p_num;
 } processes;
 
+void show_processes(const processes * p) {
+    for (int i = 0; i < p->p_num; i++) {
+        printf("cmd: %s/pid: %d/ppid: %d/pp_ind: %d\n", p->p_array[i].cmd, p->p_array[i].pid, p->p_array[i].ppid, p->p_array[i].parent_index);
+    }
+}
 
 void parse_stat(char * contents, processes * p) {
     char * c;
@@ -233,7 +238,8 @@ int main(int ac, char *av[]) {
     get_process(p);
     set_parent_process_index(p);
     // show_process(p);
-    pre_order_traverse(p, 0, 0, &opt);
+    // pre_order_traverse(p, 0, 0, &opt);
+    show_processes(p);
 
     free(p);
     return 0;
