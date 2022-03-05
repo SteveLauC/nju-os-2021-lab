@@ -209,6 +209,21 @@ void set_parent_process_index(processes * p) {
     }
 }
 
+
+void pre_order_traverse(const processes *p, int index, int level) {
+    if (0!=p->p_num) {
+        for(int i = 0; i < level;i++) {
+            printf("\t");
+        }
+        printf("%s%c\n", p->p_array[index].cmd);
+
+        for (int j = 0; j < p->p_num; j++ ) {
+            if (p->p_array[j].ppid==index) {
+                pre_order_traverse(p, j, level+1);
+            }
+        }
+    }
+}
 int main(int ac, char *av[]) {
     // options opt = get_options(ac, av);
     
@@ -216,7 +231,8 @@ int main(int ac, char *av[]) {
     processes * p = (processes*)malloc(sizeof(processes));
     get_process(p);
     set_parent_process_index(p);
-    show_process(p);
+    // show_process(p);
+    pre_order_traverse(p, 0, 0);
 
     free(p);
     return 0;
