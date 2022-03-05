@@ -221,7 +221,7 @@ void pre_order_traverse(const processes *p, int index, int level, const options 
         printf("%s", p->p_array[index].cmd);
 
         if (opt_ptr->show_pid) {
-            printf("%d", p->p_array[index].pid);
+            printf("(%d)", p->p_array[index].pid);
         }
         printf("\n");
 
